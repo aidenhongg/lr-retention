@@ -1,16 +1,26 @@
 # Learning rate and unlearning retention
 
-Does **E(lr)**, a rounding probe computed from the original weights, predict how much forgetting survives FP4 quantization? This repository contains a completed MUSE-News experiment, its implementation, frozen data, raw measurements and reports.
+This experiment asks whether **E(lr)**, a simple check of how model weights respond to rounding, predicts how much forgetting survives model compression. This repository contains the completed MUSE-News experiment, its code, saved data, measurements and reports.
 
 ## Background
 
-Unlearning aims to remove selected information while preserving a model's other capabilities. [Zhang et al.](https://arxiv.org/abs/2410.16454) showed that quantization can restore information a model appeared to have forgotten. Small updates can also disappear earlier, when training writes them into BF16 weights without an FP32 master copy, as studied by [Singh](https://arxiv.org/abs/2610.31859).
+A model stores what it has learned in numbers called weights. Unlearning adjusts those weights to reduce the model's ability to reproduce selected training data while preserving its other capabilities. Quantization makes a model smaller by storing its weights with fewer bits, which rounds their values. [Zhang et al.](https://arxiv.org/abs/2410.16454) showed that this rounding can restore information a model appeared to have forgotten.
 
-E(lr) is the fraction of original linear weights unchanged after **both** adding and subtracting the learning rate in FP32 and rounding back to BF16. We test whether lower E(lr) corresponds to more forgetting surviving quantization. It is a probe of rounding sensitivity, not a measurement of actual AdamW updates.
+Rounding can also remove small weight changes during training. [Singh](https://arxiv.org/abs/2610.31859) studied this problem when weights are stored directly in BF16, a 16-bit number format, without a higher-precision FP32 copy to accumulate small changes. This gives us two stages to consider: changes can disappear during training, and the changes that remain can be rounded again during later quantization.
+
+### Why consider E as well as learning rate?
+
+The learning rate, or LR, sets the scale of training changes. Whether a small change survives rounding also depends on the size of the weight and the precision used to store it. The same LR can therefore affect different models differently. Singh's E(u) captures some of this context by estimating how many weights would remain unchanged after a trial change of size u.
+
+We use the LR as that trial size. We separately add and subtract it from each tested original weight using FP32, then round each result to BF16. Our **E(lr)** is the fraction of those weights unchanged in both cases. A high E means many weights resist a change of that size; a low E means more weights can record it. The probe can be calculated from the original weights before training, making it a practical candidate for anticipating problems caused by rounding.
+
+Our hypothesis is that lower E will correspond to more forgetting surviving later FP4 quantization. This extends Singh's work on training precision to unlearning and model compression. The training algorithm can make individual changes larger or smaller than the LR, so E is only a rough indicator here. For fixed original weights and precision, E is still determined by LR. We therefore compare both predictors rather than assume E is better.
 
 ## Experiment
 
-We use the [MUSE-News](https://arxiv.org/abs/2407.06460) Llama-2-7B target and GA_GDR: gradient ascent on forget data plus gradient descent on retain data. Model, tokenizer and data revisions are pinned in [the configuration](configs/experiment.yaml).
+We start with the [MUSE-News](https://arxiv.org/abs/2407.06460) version of Llama-2-7B, a language model with seven billion parameters. We use a training method called GA_GDR. It tries to make the model worse at predicting the text we want forgotten and better at predicting the text we want retained. The exact model and data versions are recorded in [the configuration](configs/experiment.yaml).
+
+For each LR, we select a saved model version, called a checkpoint, near a shared forgetting target. Selection uses validation data and is fixed before we inspect quantized results or the separate test data. We then compare the selected models before and after FP4 quantization, which stores the quantized weights with four bits.
 
 | Setting | Completed run |
 | --- | --- |
@@ -21,25 +31,33 @@ We use the [MUSE-News](https://arxiv.org/abs/2407.06460) Llama-2-7B target and G
 | Selection | Nearest forget-validation NLL to a shared target, frozen before quantized or test evaluation |
 | Quantization | bitsandbytes FP4; 12 final evaluations across the original and five selected models |
 
-The main outcome is the fraction of the forget-test NLL increase that survives quantization:
+NLL, or negative log-likelihood, measures how poorly a model predicts the next token, a small piece of text such as a word or part of a word. We report it in units called nats.
+
+**Forget NLL** measures prediction error on the text we want forgotten; a higher value means worse prediction of that text and serves as our proxy for forgetting.
+
+**Retain NLL** measures prediction error on the text we want the model to keep handling well; an increase over the original model signals damage to that performance.
+
+Our main outcome is the fraction of the forgetting effect that remains after quantization:
 
 ```text
 retention = [NLL(Q(U)) - NLL(Q(T))] / [NLL(U) - NLL(T)]
 ```
 
-Here T is the original model, U is a selected unlearned model, and Q applies FP4 quantization. Higher retention means more forgetting survives. Ratios are unclamped, so values above one are possible. Retain-set NLL measures the accompanying utility cost separately.
+Here T is the original model, U is a selected unlearned model, and Q applies FP4 quantization. A retention value of 1 means the measured forgetting effect fully survives, while 0 means none of the NLL increase remains. Values above 1 are possible if that effect increases after quantization. Here, retention means survival of forgetting; retain NLL separately measures performance on the text the model should still handle well.
 
 ## Latest results
 
-At LR **1e-5**, retention was **0.005956**; at the other four LRs it ranged from **0.885885 to 1.031947**. E(lr) correlated negatively with retention (Pearson **-0.714**, Spearman **-0.527**). Log learning rate had a larger absolute association (Pearson **+0.870**, Spearman **+0.600**). These descriptive correlations do not establish that E adds predictive value beyond LR.
+At LR **1e-5**, almost all of the measured forgetting disappeared after FP4 quantization: retention was **0.005956**. At the other four LRs, retention ranged from **0.885885 to 1.031947**, so most or all of the effect remained.
+
+Lower E generally went with more forgetting surviving quantization. Two measures of association were negative for E: Pearson correlation was **-0.714**, and Spearman rank correlation was **-0.527**. Log learning rate had a larger absolute association, at **+0.870** and **+0.600**, respectively. These observations do not establish that E predicts new results better than LR alone.
 
 ![Forgetting retention versus E and learning rate, with validation matching errors](graphs/refinement_predictor_assessment.png)
 
-The same five outcomes plotted against E(lr) and learning rate. There is one seed per LR and only three distinct E values.
+These plots show the same five outcomes against E(lr) and learning rate. Each LR has only one training seed, so we cannot estimate variation across repeated runs. The five LRs also produce only three distinct E values.
 
 ![Validation mismatch, forgetting before and after FP4, and retain-performance damage](graphs/refinement_effects_and_utility.png)
 
-Actual matching errors reached **+/-0.732 nats** under a configured 10-nat tolerance. Every selected unquantized model increased retain-test NLL by **9.716-11.197 nats**. The association therefore describes models with substantial utility damage and does not demonstrate useful selective unlearning.
+The selected models differed from the shared forgetting target by up to **0.732 nats**, within the broad configured tolerance of 10 nats. Every selected unquantized model also increased retain-test NLL by **9.716-11.197 nats**, showing severe damage to predictions on retained text. The results therefore describe forgetting that accompanies a substantial loss of model performance; they do not demonstrate useful selective unlearning.
 
 ![Full and early forget/retain validation trajectories with selected checkpoints](graphs/refinement_validation_panels.png)
 
