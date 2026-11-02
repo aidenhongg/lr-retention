@@ -8,11 +8,7 @@ A model stores what it has learned in numbers called weights. Unlearning adjusts
 
 Rounding can also remove small weight changes during training. [Singh](https://arxiv.org/abs/2610.31859) studied this problem when weights are stored directly in BF16, a 16-bit number format, without a higher-precision FP32 copy to accumulate small changes. This gives us two stages to consider: changes can disappear during training, and the changes that remain can be rounded again during later quantization.
 
-### Why consider E as well as learning rate?
-
 The learning rate, or LR, sets the scale of training changes. Whether a small change survives rounding also depends on the size of the weight and the precision used to store it. The same LR can therefore affect different models differently. Singh's E(u) captures some of this context by estimating how many weights would remain unchanged after a trial change of size u.
-
-We use the LR as that trial size. We separately add and subtract it from each tested original weight using FP32, then round each result to BF16. Our **E(lr)** is the fraction of those weights unchanged in both cases. A high E means many weights resist a change of that size; a low E means more weights can record it. The probe can be calculated from the original weights before training, making it a practical candidate for anticipating problems caused by rounding.
 
 Our hypothesis is that lower E will correspond to more forgetting surviving later FP4 quantization. This extends Singh's work on training precision to unlearning and model compression. The training algorithm can make individual changes larger or smaller than the LR, so E is only a rough indicator here. For fixed original weights and precision, E is still determined by LR. We therefore compare both predictors rather than assume E is better.
 
