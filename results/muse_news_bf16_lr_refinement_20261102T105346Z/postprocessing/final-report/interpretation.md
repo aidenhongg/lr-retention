@@ -1,0 +1,11 @@
+# Interpretation and independent record review
+
+FP4 almost erased the forgetting effect at LR 1e-5: the raw forget-test NLL gap fell from 11.450704 to 0.068197 nats, leaving a retention ratio of 0.005956. At the other four learning rates, retention ranged from 0.885885 to 1.031947. Ratios are not clamped, so a value above one is an observed increase in the measured effect.
+
+Lower E(LR) coincided descriptively with greater persistence of forgetting. Pearson correlation was -0.713988 for E and +0.870424 for log learning rate; Spearman correlations were -0.527046 and +0.600000. Log learning rate therefore had the larger absolute association in this sample. E took only three distinct values across five settings. These measurements do not establish added predictive value beyond learning rate.
+
+Every selected unquantized model had severe retain-test damage: retain NLL increased by 9.716261–11.196978 nats relative to T. For LR 1e-5, quantization largely restored retain prediction as well as forget prediction; its quantized retain increase was only 0.090619 nats relative to Q(T). The other quantized models retained increases of 8.836663–11.556947 nats. The observed forgetting therefore accompanies substantial general degradation and does not demonstrate useful selective unlearning.
+
+The frozen validation target was 11.424177 nats. Actual signed errors were +0.731258, -0.340111, +0.504155, -0.731258, and -0.434458 in ascending LR order. Achieved values spanned 1.462516 nats. The comparison passed the configured 10-nat tolerance, but this should be described as approximate matching under that rule. One seed per LR, different selected update counts, substantial utility damage, and imperfect matching limit interpretation.
+
+An independent read-only cloud audit verified all 12 final evaluations. Every evaluation used 22,509 forget-test target tokens and 26,432 retain-test target tokens. The five raw NLL quartets, retention ratios, and utility deltas agreed with recorded NLL sums and token counts. Retention denominators were positive, 10.174929–11.466602 nats, well above the existing 1e-8 cutoff. The audit found no outcome-causing software error. All numerical aggregation and checks ran on RunPod; this interpretation adds no model evaluations or protocol changes.

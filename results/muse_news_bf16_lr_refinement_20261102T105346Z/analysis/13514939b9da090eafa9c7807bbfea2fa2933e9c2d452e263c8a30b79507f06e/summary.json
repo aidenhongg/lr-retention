@@ -1,0 +1,23 @@
+{
+  "comparison": "matched",
+  "learning_rate_count": 5,
+  "comparable_learning_rate_count": 5,
+  "seed_counts": {
+    "1e-05": 1,
+    "2e-05": 1,
+    "3e-05": 1,
+    "4e-05": 1,
+    "5e-05": 1
+  },
+  "pearson_e_retention": -0.7139882215754328,
+  "pearson_log_lr_retention": 0.8704239229198956,
+  "spearman_e_retention": -0.5270462766947299,
+  "spearman_log_lr_retention": 0.6,
+  "limitations": [
+    "Exploratory comparison within one fixed model/data/precision/quantizer setup.",
+    "Correlations use one seed mean per learning rate; seeds are not independent LR settings.",
+    "E is determined by LR and original weights; correlation alone does not establish added value beyond LR.",
+    "Validation matching does not guarantee matched test forgetting; inspect raw test effects and retain costs.",
+    "At least one LR has one seed: seed variability cannot be estimated there."
+  ]
+}

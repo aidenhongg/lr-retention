@@ -1,0 +1,35 @@
+{
+  "status": "estimated_not_invoice",
+  "scope": "This follow-up only",
+  "pod_id": "hyt9x1fa4ux21q",
+  "duration_hours": 3.0933559273348914,
+  "conservative_hourly_rate_usd": 2.792361111111111,
+  "estimated_follow_up_total_usd": 8.637766794314999,
+  "run_budget_usd": 15.0,
+  "estimated_within_budget": true,
+  "includes": [
+    "GPU",
+    "ephemeral disk",
+    "new retained volume storage while pod was alive"
+  ],
+  "excludes": [
+    "prior pilot",
+    "unrelated workloads",
+    "future storage after pod termination"
+  ],
+  "rate_basis": {
+    "gpu_hourly_usd": 2.5,
+    "disk_hourly_usd": 0.2777777777777778,
+    "new_volume_hourly_usd": 0.014583333333333335,
+    "saved_conservative_hourly_usd": 2.7823611111111113
+  },
+  "storage_hour_conversion": "720 hours per month; conservative maximum rate applied to entire duration",
+  "ongoing_storage": {
+    "new_monthly_usd": 10.500000000000002,
+    "old_monthly_usd": 5.6000000000000005,
+    "combined_monthly_usd": 16.1,
+    "usd_per_gb_month": 0.07,
+    "source": "https://www.runpod.io/pricing",
+    "basis": "Actual allocated sizes returned by REST GET; future cost excluded above"
+  }
+}

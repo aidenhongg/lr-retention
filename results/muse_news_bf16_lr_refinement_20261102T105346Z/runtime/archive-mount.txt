@@ -1,0 +1,2 @@
+TARGET     SOURCE                                                     FSTYPE OPTIONS
+/workspace mfs#eur-is-1-2.runpod.net:9421[/networkvolumes/vh9mvmjd8a] fuse   rw,nosuid,nodev,relatime,user_id=0,group_id=0,allow_other

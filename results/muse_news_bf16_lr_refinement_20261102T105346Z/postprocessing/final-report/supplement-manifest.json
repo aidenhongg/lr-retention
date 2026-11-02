@@ -1,0 +1,43 @@
+{
+  "status": "verified",
+  "verification": "sha256_source_and_destination",
+  "destination": "/workspace/muse_news_bf16_lr_refinement_20261102T105346Z/postprocessing/final-report",
+  "files": [
+    {
+      "path": "interpretation.md",
+      "bytes": 2295,
+      "sha256": "9c764614fe71482c6bbb67f16b65b73aababbfbfaf8d58eeeee88e4fd6881c79"
+    },
+    {
+      "path": "overview.csv",
+      "bytes": 3911,
+      "sha256": "48757b7e614f481e865602b64c96d4f037f14a903b365f2445705874b88b631f"
+    },
+    {
+      "path": "preserve_refinement_report.py",
+      "bytes": 2157,
+      "sha256": "1629d3cd16ea3a202d9a5745e7b4c76da78b459d4efdcd2ebde2861c7ba8e5e6"
+    },
+    {
+      "path": "provenance.json",
+      "bytes": 57801,
+      "sha256": "9311f0b097d1f4bc01d2d1920f9fb32ca417100113d0f54f261c153e6f7f7c71"
+    },
+    {
+      "path": "raw_effects_and_utility.png",
+      "bytes": 178051,
+      "sha256": "1fea5091d706096f6c72d7f37f60f18cf807ea3913dbfff50f587dee777c8e80"
+    },
+    {
+      "path": "raw_effects_and_utility.svg",
+      "bytes": 79421,
+      "sha256": "28d0730ece5d4817d89156f86ea3e0936f59f36c195ba3af226c19fb230193bd"
+    },
+    {
+      "path": "report.md",
+      "bytes": 7752,
+      "sha256": "8decc46fc9a324783dab36222bbd95af4692ea74ef4408faa28eaf0b9b1ebabf"
+    }
+  ],
+  "scope": "Additive postprocessing; original weight archive manifest unchanged"
+}

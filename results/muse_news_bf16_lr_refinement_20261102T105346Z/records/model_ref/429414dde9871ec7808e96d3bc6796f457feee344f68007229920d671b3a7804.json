@@ -1,0 +1,1 @@
+{"kind":"model_ref","location":"muse-bench/MUSE-news_target","model_id":"429414dde9871ec7808e96d3bc6796f457feee344f68007229920d671b3a7804","revision":"a2f39769e9a0b98ec1cdd12f65e9962502208935","schema_version":1,"source":"huggingface","storage_dtype":"bfloat16","tokenizer_id":"NousResearch/Llama-2-7b-hf","tokenizer_revision":"8efe6c9b93655b934e27bd9981e3ec13e55aee9d"}

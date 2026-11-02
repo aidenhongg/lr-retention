@@ -1,0 +1,20 @@
+[
+  {
+    "id": "vh9mvmjd8a",
+    "dataCenterId": "EUR-IS-1",
+    "size_gb": 150.0,
+    "expected_size_gb": 150,
+    "size_changed": false,
+    "monthly_storage_usd": 10.500000000000002,
+    "preserved": true
+  },
+  {
+    "id": "27k6qtrwsc",
+    "dataCenterId": "US-NC-1",
+    "size_gb": 80.0,
+    "expected_size_gb": 80,
+    "size_changed": false,
+    "monthly_storage_usd": 5.6000000000000005,
+    "preserved": true
+  }
+]

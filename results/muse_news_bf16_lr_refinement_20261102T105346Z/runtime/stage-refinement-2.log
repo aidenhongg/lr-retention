@@ -1,0 +1,46 @@
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/checkpoint_complete.json", "bytes": 682}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/config.json", "bytes": 710}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/generation_config.json", "bytes": 111}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/model-00001-of-00003.safetensors", "bytes": 4938985352}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/model-00002-of-00003.safetensors", "bytes": 4947390880}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/model-00003-of-00003.safetensors", "bytes": 3590488816}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/model.safetensors.index.json", "bytes": 23950}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/special_tokens_map.json", "bytes": 548}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/tokenizer.model", "bytes": 499723}
+{"event": "staged_final_file", "path": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248/tokenizer_config.json", "bytes": 960}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/checkpoint_complete.json", "bytes": 682}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/config.json", "bytes": 710}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/generation_config.json", "bytes": 111}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/model-00001-of-00003.safetensors", "bytes": 4938985352}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/model-00002-of-00003.safetensors", "bytes": 4947390880}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/model-00003-of-00003.safetensors", "bytes": 3590488816}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/model.safetensors.index.json", "bytes": 23950}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/special_tokens_map.json", "bytes": 548}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/tokenizer.model", "bytes": 499723}
+{"event": "staged_existing_file_verification_deferred", "path": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248/tokenizer_config.json", "bytes": 960}
+{
+  "checkpoints": [
+    {
+      "location": "checkpoints/54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5/checkpoint-1248",
+      "model_id": "98f50f68f2e54cadea4ec0b3ec334c63f52a597b2d3c669f119746eaf96b4311",
+      "roles": [
+        "final"
+      ],
+      "run_id": "54ad9d4cf18b9b7c9f5a3c5b4ed7978086a51f5ce27d5dd77349cbd8054c18a5",
+      "step": 1248
+    },
+    {
+      "location": "checkpoints/dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86/checkpoint-1248",
+      "model_id": "35f67972f6fd351b97f2eea8606469dab2a812e1bfcdbbc2e657d265a79a3712",
+      "roles": [
+        "final"
+      ],
+      "run_id": "dfd22062d47e532e708aef195884edfe1bccac44ec7d8b175669009ba0a5fe86",
+      "step": 1248
+    }
+  ],
+  "destination": "/workspace/muse_news_bf16_lr_refinement_20261102T105346Z",
+  "file_count": 20,
+  "status": "staged",
+  "total_bytes": 26954783464
+}

@@ -1,0 +1,8 @@
+{
+  "verified_at": "2026-11-02T14:17:46.904817+00:00",
+  "pod_id": "hyt9x1fa4ux21q",
+  "state_terminated_at": 1793629051.3543541,
+  "owned_follow_up_pod_absent_from_api": true,
+  "both_retained_volumes_verified": true,
+  "lifecycle_mutations_performed": false
+}

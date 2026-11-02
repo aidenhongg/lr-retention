@@ -1,0 +1,120 @@
+# Recipe: Zhang et al., ICLR 2025, Appendix D.1, MUSE-News / GA_GDR.
+# https://arxiv.org/html/2410.16454v2
+# https://github.com/zzwjames/FailureLLMUnlearning
+# Sweep and checkpoint matching are our additions. Paths are project-relative.
+
+experiment:
+  name: muse_news_bf16_lr_refinement_20261102T105346Z
+  output_dir: results/muse_news_bf16_lr_refinement_20261102T105346Z
+
+execution:
+  parallel_eval_on_separate_machine: false
+  device: cuda:0
+  max_cost_usd: 15.0
+  shutdown_reserve_usd: 1.0
+  max_gpu_cost_per_hour: 2.50
+
+model:
+  source: muse-bench/MUSE-news_target
+  revision: a2f39769e9a0b98ec1cdd12f65e9962502208935
+  path: data/models/MUSE-News_target
+  # Public mirror; tokenizer.model matches the original Llama-2 tokenizer.
+  tokenizer: NousResearch/Llama-2-7b-hf
+  tokenizer_revision: 8efe6c9b93655b934e27bd9981e3ec13e55aee9d
+  tokenizer_model_sha256: 9e556afd44213b6bd1be2b850ebbbd98f5481437a8021afaf58ee7fb1818d347
+
+data:
+  corpus: news
+  source: muse-bench/MUSE-News
+  revision: 506bd5b150b92814d45e4404a82f120ab2d748bf
+  forget_train: data/forget/train.jsonl
+  retain_train: data/retain/train.jsonl
+  forget_validation: data/forget/validation.jsonl
+  retain_validation: data/retain/validation.jsonl
+  forget_test: data/forget/test.jsonl
+  retain_test: data/retain/test.jsonl
+  validation_documents: 16
+  test_documents: 32
+  max_sequence_length: 2048
+
+sweep:
+  # Includes the paper's baseline LR of 1e-5.
+  learning_rates: [0.00001, 0.00002, 0.00003, 0.00004, 0.00005]
+  seeds: [0]
+
+training:
+  method: ga_gdr
+  retain_loss_weight: 1.0  # Paper Table 5, NEWS / GA_GDR.
+  optimizer: adamw_torch
+  # Transformers 4.40 Trainer defaults, made explicit.
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 0.00000001
+  weight_decay: 0.0
+  max_grad_norm: 1.0
+  per_device_batch_size: 2
+  gradient_accumulation_steps: 1
+  lr_scheduler: constant
+  warmup_steps: 0
+  max_epochs: 3  # Fixed budget for every LR and seed.
+  parameter_dtype: bfloat16
+  optimizer_state_dtype: bfloat16
+  fp32_master_weights: false
+  stochastic_rounding: false
+  shuffle: true  # Use the run seed for training data order.
+
+checkpointing:
+  save_on_validation_schedule: true
+  save_final: true
+  keep_until_selection_complete: true
+  after_selection: keep_selected_and_final
+
+target_selection:
+  timing: after_all_sweep_runs
+  metric: forget_validation_nll
+  model: unquantized
+  scope: all_learning_rates_and_seeds
+  # Choose target strength and acceptable mismatch from unquantized validation
+  # curves before inspecting quantized or blind-test results.
+  rule: select_from_common_observed_nll_range
+  minimum_gain: 0.25
+  max_abs_error: 10.0
+  checkpoint_selection: nearest_nll_then_earliest_step
+  if_no_common_target: report_no_matched_comparison
+  if_run_failed: report_no_matched_comparison
+  freeze_before_quantized_evaluation: true
+  freeze_before_test_evaluation: true
+  record_achieved_nll_and_matching_error: true  # Error = achieved NLL - target NLL.
+  report_all_run_trajectories_and_final_nll: true
+
+evaluation:
+  # Positive epoch interval; steps = max(1, ceil(interval * optimizer_steps_per_epoch)).
+  validation_every_epochs: 0.25
+  early_validation_steps: [1, 2, 4, 6, 8, 10, 15, 25, 50]
+  metric: causal_lm_nll
+  reduction: mean_over_non_padding_target_tokens
+  log_base: e
+  fixed_samples_across_runs: true
+  inference_dtype: bfloat16
+  max_validation_samples: 16
+  max_test_samples: 32
+  per_device_batch_size: 2  # Our evaluation memory setting.
+  # Reserve blind tests for final evaluation after checkpoint selection.
+  final_split: test
+  evaluate_original_and_quantized_baselines_once: true
+  quantize_selected_checkpoints_only: true
+
+quantization:
+  # Explicit defaults of the reference BitsAndBytesConfig(load_in_4bit=True).
+  backend: bitsandbytes
+  load_in_4bit: true
+  bnb_4bit_quant_type: fp4
+  bnb_4bit_use_double_quant: false
+  bnb_4bit_compute_dtype: float32
+  non_quantized_parameter_dtype: bfloat16
+  calibration_required: false
+
+predictor:
+  enabled: true
+  metric: E_lr  # Singh's predictor, evaluated at each sweep LR.
+  model: original

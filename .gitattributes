@@ -1,0 +1,3 @@
+# Preserve archived evidence and figures exactly for SHA-256 verification.
+results/** -text
+graphs/** -text

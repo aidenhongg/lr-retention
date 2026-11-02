@@ -21,6 +21,11 @@ wandb/
 huggingface/
 
 # Pod bookkeeping (IDs and SSH hosts of throwaway pods)
+runpod/*state*.json
+runpod/*guard*.jsonl
+runpod/*volume*.json
+runpod/*.telemetry.jsonl
+runpod/STOP
 pod_*.txt
 ssh_*.txt
 DONE*
