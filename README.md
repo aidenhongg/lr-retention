@@ -142,9 +142,3 @@ Confirm the receipt reports `status: verified` and check its experiment status a
 python runpod/pod.py terminate --state runpod/new-run-state.json
 python runpod/pod.py status --state runpod/new-run-state.json
 ```
-
-## Stored weights and provenance
-
-The completed run's GPU is terminated. Five selected and five final BF16 checkpoints remain on RunPod volume `vh9mvmjd8a` in EUR-IS-1, under `/workspace/muse_news_bf16_lr_refinement_20261102T105346Z`. Their [archive receipt](results/muse_news_bf16_lr_refinement_20261102T105346Z/archive/5197ff1b2566c586480e3fb3a62649cb13b7adab50ad9742ac82be84227bd8ac.json) verifies source and destination hashes. Persistent storage remains allocated and billed after GPU teardown.
-
-Git contains the completed refinement's evidence and tokenized inputs. Weights and credentials are excluded. The raw upstream corpus is identified by its pinned revision; top-level `data/` paths are generated runtime inputs. Earlier pilot results remain in a separate archive in the original research workspace. See [background](docs/background.md), [hypotheses](docs/hypotheses.md) and [design](docs/design.md) for further detail.
